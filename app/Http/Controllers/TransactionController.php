@@ -18,6 +18,7 @@ class TransactionController extends Controller
 
     public function getTransactionsList()
     {
+        return view('layouts.transactionsList');
     }
 
 

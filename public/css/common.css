@@ -1,6 +1,11 @@
 .balance {
     margin-top: 40px;
 }
+
 .pay {
     margin-top: 25px;
+}
+
+#description {
+    resize: none;
 }

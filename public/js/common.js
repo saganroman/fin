@@ -13,4 +13,19 @@ $(document).ready(function () {
             return false;
         }
     });
+ //date in users balance of period page
+    $('#dateBegin').datetimepicker({format: 'DD.MM.YYYY',
+        locale: 'ru',});
+    $('#dateEnd').datetimepicker({
+        format: 'DD.MM.YYYY',
+        locale: 'ru',
+        useCurrent: false //Important! See issue #1075
+    });
+    $("#dateBegin").on("dp.change", function (e) {
+        $('#dateEnd').data("DateTimePicker").minDate(e.date);
+    });
+    $("#dateEnd").on("dp.change", function (e) {
+        $('#dateBegin').data("DateTimePicker").maxDate(e.date);
+    });
+
 });
