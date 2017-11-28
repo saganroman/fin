@@ -80,7 +80,7 @@ class AdminController extends Controller
             $usersBalance[] = ['user_name' => $user->name, 'balanceR' => $sumR, 'balanceD' => $sumD];
         }
 
-        return view('layouts.usersBalance')->with('usersBalance',$usersBalance);
+        return view('layouts.usersBalance')->with('usersBalance', $usersBalance);
 
     }
 
@@ -91,6 +91,29 @@ class AdminController extends Controller
     public function getBalacePeriod()
     {
         return view('layouts.balancePeriod');
+    }
+
+    public function getBalanceByPeriod(Request $request)
+    {
+        $startData = $request->startData;
+        $endData = $request->endData;
+        $users = User::all();
+        $usersBalance = [];
+        foreach ($users as $user) {
+            $userTransactions = Transaction::where('user_id', $user->id)->where('date','>=', $startData)->where('date','<=', $endData)->get();
+            $sumD = 0;
+            $sumR = 0;
+            foreach ($userTransactions as $userTransaction) {
+                if ($userTransaction->type == 1) {
+                    $sumR = $sumR + $userTransaction->sum;
+                } elseif ($userTransaction->type == 2) {
+                    $sumD = $sumD + $userTransaction->sum;
+                }
+
+            }
+            $usersBalance[] = ['user_name' => $user->name, 'balanceR' => $sumR, 'balanceD' => $sumD];
+        }
+        return json_encode($usersBalance);
     }
 
     public function settings()

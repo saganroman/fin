@@ -28,5 +28,6 @@ Route::get('/ownBalance', 'AdminController@getOwnBalance');
 Route::get('/usersBalance', 'AdminController@getUsersBalance');
 Route::get('/addExpenses', 'AdminController@addExpenses');
 Route::get('/balacePeriod', 'AdminController@getBalacePeriod');
+Route::get('/getBalanceByPeriod', 'AdminController@getBalanceByPeriod');
 Route::get('/settings','AdminController@settings');
 /*Route::get('/', 'Controller@index');*/

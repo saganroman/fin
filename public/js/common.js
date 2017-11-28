@@ -37,8 +37,29 @@ $(document).ready(function () {
             url: "getUserKarma?id=" + userId,
             //cache: false,
             success: function (result) {
-                var user =JSON.parse(result);
+                var user = JSON.parse(result);
                 $("#karma").val(user.karma);
+            }
+        });
+    });
+
+    $('#getPeriod').on('click', function () {
+        var startData = $("#dateBegin input").val();
+        var endData = $("#dateEnd input").val();
+
+        $.ajax({
+            type: "GET",
+            url: "getBalanceByPeriod?startData=" + startData + '&endData=' + endData,
+            //cache: false,
+            success: function (result) {
+                var users = JSON.parse(result);
+                //console.log(users);
+                users.forEach(function(item, i, arr) {
+                    var index = i+1;
+                    $('#balancePeriod').append("<tr> <td>"+index+"</td>  <td>"+item.user_name+"</td> <td>"+item.balanceR+"Руб/"+ item.balanceD+"$" +"</td>       </tr>");
+                });
+//$('#balancePeriod').append("<tr> <td>"+1+"</td>  <td>"+item.user_name+"</td> <td>"+balanceR+"Руб/"+balanceD+"$</td>       </tr>");
+
             }
         });
     });

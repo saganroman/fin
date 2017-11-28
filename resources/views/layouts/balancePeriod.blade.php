@@ -33,14 +33,14 @@
             </div>
             <div class="row">
                 <div class='col-md-12'>
-                    <button type="submit" class="btn btn-primary pull-right">Показать</button>
+                    <button type="button"  id="getPeriod" class="btn btn-primary pull-right">Показать</button>
                 </div>
             </div>
         </form>
         <br>
         <div class="row">
             <div class="col-md-12 ">
-                <table class="table table-striped ">
+                <table class="table table-striped " id="balancePeriod">
                     <tr>
                         <th class="col-md-2 ">#</th>
                         <th class="col-md-5 ">Пользователь</th>
@@ -48,13 +48,7 @@
 
 
                     </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
 
-
-                    </tr>
 
                 </table>
             </div>
