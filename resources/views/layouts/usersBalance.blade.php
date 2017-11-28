@@ -18,14 +18,17 @@
 
 
                     </tr>
+                    @foreach($usersBalance as $user)
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{$loop->iteration}}</td>
+                        <td>{{$user['user_name']}}</td>
+                        <td>{{$user['balanceR']}}Руб/{{$user['balanceD']}}$</td>
+
+
 
 
                     </tr>
-
+@endforeach
                 </table>
             </div>
         </div>

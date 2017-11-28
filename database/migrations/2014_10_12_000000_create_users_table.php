@@ -20,6 +20,9 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->integer('ref');
             $table->integer('type');
+            $table->integer('karma');
+            $table->integer('account')->unique();
+            $table->double('percent')->default(0.3);
             $table->string('email');
             $table->string('password');
             $table->rememberToken();

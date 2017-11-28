@@ -26,4 +26,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public $timestamps = false;
+
+    public function transactions()
+    {
+        return $this->hasMany('App\Transaction');
+    }
 }

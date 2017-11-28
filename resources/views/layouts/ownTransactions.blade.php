@@ -8,6 +8,7 @@
             <!-- /.col-lg-12 -->
         </div>
 
+
         <div class="row">
             <div class="col-md-12 ">
                 <table class="table table-striped ">
@@ -21,24 +22,27 @@
                         <th class="col-md-2 ">Дата</th>
 
                     </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>d</td>
+                    @foreach($adminTransactions as $transaction)
+                        <tr>
+                            <td>{{$loop->iteration + $start }}</td>
+                            <td>{{$transaction->user->name}}</td>
+                            <td>{{$transaction->sum}}</td>
+                            <td>{{$transaction->type ==1?"Руб":"$"}}</td>
+                            <td>{{$transaction->partner->name}}</td>
+                            <td>{{$transaction->description}}</td>
+                            <td>{{$transaction->date}}</td>
 
-                    </tr>
+                        </tr>
+                    @endforeach
 
                 </table>
+                {{ $adminTransactions->links() }}
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12 ">
-                Баланс:
+                Баланс: {{$ownBalanceInR}} Руб/  {{$ownBalanceInD}}$
             </div>
         </div>
 

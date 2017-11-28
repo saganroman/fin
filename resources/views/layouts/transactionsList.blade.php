@@ -3,40 +3,41 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Просмотр транзакций  </h1>
+                <h1 class="page-header">Просмотр транзакций </h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
 
-            <div class="row">
-                <div class="col-md-12 ">
-                    <table class="table table-striped ">
+        <div class="row">
+            <div class="col-md-12 ">
+                <table class="table table-striped ">
+                    <tr>
+                        <th class="col-md-1 ">#</th>
+                        <th class="col-md-2 ">Пользователь</th>
+                        <th class="col-md-1 ">Сумма</th>
+                        <th class="col-md-2 ">Валюта</th>
+                        <th class="col-md-2 ">Партнерка</th>
+                        <th class="col-md-3 ">Описание</th>
+                        <th class="col-md-2 ">Дата</th>
+
+                    </tr>
+
+                    @foreach($transactions as $transaction)
                         <tr>
-                            <th class="col-md-1 ">#</th>
-                            <th class="col-md-2 ">Пользователь</th>
-                            <th class="col-md-1 ">Сумма</th>
-                            <th class="col-md-2 ">Валюта</th>
-                            <th class="col-md-2 ">Партнерка</th>
-                            <th class="col-md-3 ">Описание</th>
-                            <th class="col-md-2 ">Дата</th>
+                            <td>{{$loop->iteration + $start }}</td>
+                            <td>{{$transaction->user->name}}</td>
+                            <td>{{$transaction->sum}}</td>
+                            <td>{{$transaction->type ==1?"Руб":"$"}}</td>
+                            <td>{{$transaction->partner->name}}</td>
+                            <td>{{$transaction->description}}</td>
+                            <td>{{$transaction->date}}</td>
 
                         </tr>
-                        <tr>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td>d </td>
-
-                        </tr>
-
-                    </table>
-                </div>
+                    @endforeach
+                </table>
+                {{ $transactions->links() }}
             </div>
-
-
+        </div>
 
 
     </div>

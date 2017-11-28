@@ -1,21 +1,23 @@
 $(document).ready(function () {
 
     $('#datetimepicker').datetimepicker({
-       /* locale: 'ua',*/
-        ignoreReadonly : true,
+        /* locale: 'ua',*/
+        ignoreReadonly: true,
         format: 'DD.MM.YYYY',
         locale: 'ru',
         /* viewMode: 'years',*/
     });
 // запрет ввода символов в поле с суммой
     $('#amount').keypress(function (e) {
-        if (e.which != 8 && e.which != 0  && e.which != 46 && (e.which < 48 || e.which > 57)) {
+        if (e.which != 8 && e.which != 0 && e.which != 46 && (e.which < 48 || e.which > 57)) {
             return false;
         }
     });
- //date in users balance of period page
-    $('#dateBegin').datetimepicker({format: 'DD.MM.YYYY',
-        locale: 'ru',});
+    //date in users balance of period page
+    $('#dateBegin').datetimepicker({
+        format: 'DD.MM.YYYY',
+        locale: 'ru',
+    });
     $('#dateEnd').datetimepicker({
         format: 'DD.MM.YYYY',
         locale: 'ru',
@@ -27,5 +29,17 @@ $(document).ready(function () {
     $("#dateEnd").on("dp.change", function (e) {
         $('#dateBegin').data("DateTimePicker").maxDate(e.date);
     });
+    $('#userKarma').on('change', function () {
+        var userId = $(this).val();
 
+        $.ajax({
+            type: "GET",
+            url: "getUserKarma?id=" + userId,
+            //cache: false,
+            success: function (result) {
+                var user =JSON.parse(result);
+                $("#karma").val(user.karma);
+            }
+        });
+    });
 });

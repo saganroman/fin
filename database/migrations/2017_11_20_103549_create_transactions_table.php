@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTrnsactionsTable extends Migration
+class CreateTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -19,10 +19,10 @@ class CreateTrnsactionsTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->double('sum', 8, 2);
+            $table->integer('type');
             $table->integer('program_id');
-            $table->integer('percent');
             $table->text('description');
-            $table->timestamps('date');
+            $table->date('date');
 
         });
     }

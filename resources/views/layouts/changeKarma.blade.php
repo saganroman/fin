@@ -7,24 +7,26 @@
             </div>
             <!-- /.col-lg-12 -->
         </div>
-        <form action="/storeKarma" method="get">
+        <form action="storeKarma" method="get">
 
             <div class="form-group">
-                <label for="user">Выберите пользователя:</label>
-                <select id="user" class="form-control">
-                    <option value=""> 1</option>
+                <label for="userKarma">Выберите пользователя:</label>
+                <select class="form-control" id="userKarma" name="userKarma">
+                    @foreach($users as $user)
+                        <option value="{{$user->id}}">{{$user->name}}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="form-group">
                 <label for="karma">Значение кармы</label>
-                <input type="text" class="form-control" id="karma" placeholder="Значение кармы">
+                <input type="text" class="form-control" id="karma" placeholder="Значение кармы" name="karmaValue" value="{{$karma}}">
             </div>
-            <div class="form-group">
+           {{-- <div class="form-group">
                 <label for="description">Oписание</label>
 
                 <textarea class="form-control" id="description">
 </textarea>
-            </div>
+            </div>--}}
 
             <button type="submit" class="btn btn-primary">Изменить</button>
         </form>
