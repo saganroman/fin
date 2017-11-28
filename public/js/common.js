@@ -58,7 +58,6 @@ $(document).ready(function () {
                     var index = i+1;
                     $('#balancePeriod').append("<tr> <td>"+index+"</td>  <td>"+item.user_name+"</td> <td>"+item.balanceR+"Руб/"+ item.balanceD+"$" +"</td>       </tr>");
                 });
-//$('#balancePeriod').append("<tr> <td>"+1+"</td>  <td>"+item.user_name+"</td> <td>"+balanceR+"Руб/"+balanceD+"$</td>       </tr>");
 
             }
         });
