@@ -2,123 +2,187 @@
 
 namespace App\Http\Controllers;
 
-use App\Transaction;
 use Illuminate\Http\Request;
-use App\User;
+use Carbon\Carbon;
+use File;
+use Storage;
+use App\UsdEur;
 
 class AdminController extends Controller
 {
-    public $sumD = 0;
-    public $sumR = 0;
-    public $perPage = 1;
-
-    public function index()
+    public function showFileUploadForm()
     {
+        return view('layouts.fileLoad');
     }
+    /*//CSV to file
+        public function fileHandler(Request $request)
+        {
+            $hourArr = [];
+            $dayArr = [];
+            if ($request->file('fileCSV')->isValid()) {
 
-    public function getUserKarma(Request $request)
-    {
-        $id = $request->id;
-        $user = User::find($id);
-        return json_encode($user);
-    }
+                $path = $request->file('fileCSV')->path();
+                //check kind of CSV file
+                $handle = fopen($path, "r");
+                $data1 = fgetcsv($handle);
+                $time1 = Carbon::parse($data1[0]);
+                $data2 = fgetcsv($handle);
+                $time2 = Carbon::parse($data2[0]);
+                $diff = $time2->diffInHours($time1);
+                fclose($handle);
 
-    public function karmaChanging()
-    {
-        $users = User::all();
-        $karmaFirstValue = User::first()->karma;
-        return view('layouts.changeKarma')->withUsers($users)->withKarma($karmaFirstValue);
-    }
+                if ($diff == 1) {
+                    $handle = fopen($path, "r");
+                    while (($data = fgetcsv($handle)) !== FALSE) {
+                        $date = Carbon::parse($data[0])->format('Y-m-d');
+                        $time = Carbon::parse($data[0])->format('G');
+                        $hourArr[$date][$time]['Open'] = $data[1];
+                        $hourArr[$date][$time]['High'] = $data[2];
+                        $hourArr[$date][$time]['Low'] = $data[3];
+                        $hourArr[$date][$time]['Close'] = $data[4];
+                        $hourArr[$date][$time]['Volume'] = $data[5];
 
-    public function storeKarma(Request $request)
-    {
-        $id = $request->userKarma;
-        $user = User::find($id);
-        $user->karma = $request->karmaValue;
-        $user->save();
-        return redirect('/');
-    }
+                    }
+                    fclose($handle);
+                    File::delete($request->file('fileCSV')->path());
+                    $contents = json_encode($hourArr);
+                    File::put('storage/hourly.txt', $contents);
+                    // Storage::put('hourly.txt', $contents);
+                    return redirect('/getData');
 
-    public function getOwnBalance()
-    {
-        $admin = User::where('type', 1)->first();
-        $adminTransactions = Transaction::where('user_id', $admin->id)->orderBy('date', 'desc')->paginate($this->perPage);
-        $curPage = $adminTransactions->currentPage();
-        $perPage = $adminTransactions->perPage();
-        $startItemInPage = ($curPage - 1) * $perPage;
-        $ownTransactions = Transaction::where('user_id', $admin->id)->get();
-        $ownTransactions->map(function ($transaction) {
-            if ($transaction->type == 1) {
-                $this->sumR = $this->sumR + $transaction->sum;
-            }
-        });
-        $ownTransactions->map(function ($transaction) {
-            if ($transaction->type == 2) {
-                $this->sumD = $this->sumD + $transaction->sum;
-            }
-
-        });
-        return view('layouts.ownTransactions')->with('ownBalanceInR', $this->sumR)->with('ownBalanceInD', $this->sumD)->with('adminTransactions', $adminTransactions)->with('start', $startItemInPage);
-    }
-
-    public function getUsersBalance()
-    {
-        $users = User::all();
-        $usersBalance = [];
-        foreach ($users as $user) {
-            $userTransactions = Transaction::where('user_id', $user->id)->get();
-            $sumD = 0;
-            $sumR = 0;
-            foreach ($userTransactions as $userTransaction) {
-                if ($userTransaction->type == 1) {
-                    $sumR = $sumR + $userTransaction->sum;
-                } elseif ($userTransaction->type == 2) {
-                    $sumD = $sumD + $userTransaction->sum;
+                } elseif ($diff == 24) {
+                    $handle = fopen($path, "r");
+                    while (($data = fgetcsv($handle)) !== FALSE) {
+                        $date = Carbon::parse($data[0])->format('Y-m-d');
+                        //   $time = Carbon::parse($data[0])->format('G');
+                        $dayArr[$date]['Open'] = $data[1];
+                        $dayArr[$date]['High'] = $data[2];
+                        $dayArr[$date]['Low'] = $data[3];
+                        $dayArr[$date]['Close'] = $data[4];
+                        $dayArr[$date]['Volume'] = $data[5];
+                        // $date = Carbon::createFromFormat('d.m.Y-', $data[0])->toDateString();
+                    }
+                    fclose($handle);
+                    File::delete($request->file('fileCSV')->path());
+                    // $lastDate = end(array_keys($arrayV));
+                    $contents = json_encode($dayArr);
+                    File::put('storage/daily.txt', $contents);
+                    return redirect('/getData');
+                } else {
+                    $request->session()->flash('wrongFormat', 'File has wrong format!!!  Supported only hoyrly and daily data');
+                    return back();
                 }
-
             }
-            $usersBalance[] = ['user_name' => $user->name, 'balanceR' => $sumR, 'balanceD' => $sumD];
+
+        } */
+
+//CSV to DB
+    public function fileHandler(Request $request)
+    {
+        $hourArr = [];
+        $dayArr = [];
+        if ($request->file('fileCSV')->isValid()) {
+
+            $path = $request->file('fileCSV')->path();
+            //check kind of CSV file
+            $handle = fopen($path, "r");
+            $data1 = fgetcsv($handle);
+            $time1 = Carbon::parse($data1[0]);
+            $data2 = fgetcsv($handle);
+            $time2 = Carbon::parse($data2[0]);
+            $diff = $time2->diffInHours($time1);
+            fclose($handle);
+
+            if ($diff == 1) {
+                $handle = fopen($path, "r");
+                while (($data = fgetcsv($handle)) !== FALSE) {
+                    $pair = new UsdEur();
+                    $pair->date = Carbon::parse($data[0])->format('Y-m-d');
+                    // $time = Carbon::parse($data[0])->format('G');
+                    $pair->Open = $data[1];
+                    $pair->High = $data[2];
+                    $pair->Low = $data[3];
+                    $pair->Close = $data[4];
+                    $pair->Volume = $data[5];
+                    $pair->save();
+                }
+                fclose($handle);
+                File::delete($request->file('fileCSV')->path());
+                $contents = json_encode($hourArr);
+              //  File::put('storage/hourly.txt', $contents);
+                // Storage::put('hourly.txt', $contents);
+                return redirect('/getData');
+
+            } elseif ($diff == 24) {
+                $handle = fopen($path, "r");
+                while (($data = fgetcsv($handle)) !== FALSE) {
+                    $pair = new UsdEur();
+                    $pair->date = Carbon::parse($data[0])->format('Y-m-d');
+                    //   $time = Carbon::parse($data[0])->format('G');
+                    $pair->Open = $data[1];
+                    $pair->High  = $data[2];
+                    $pair->Low = $data[3];
+                    $pair->Close = $data[4];
+                    $pair->Volume = $data[5];
+                    // $date = Carbon::createFromFormat('d.m.Y-', $data[0])->toDateString();
+                    $pair->save();
+                }
+                fclose($handle);
+                File::delete($request->file('fileCSV')->path());
+                // $lastDate = end(array_keys($arrayV));
+                $contents = json_encode($dayArr);
+              //  File::put('storage/daily.txt', $contents);
+                return redirect('/getData');
+            } else {
+                $request->session()->flash('wrongFormat', 'File has wrong format!!!  Supported only hoyrly and daily data');
+                return back();
+            }
         }
 
-        return view('layouts.usersBalance')->with('usersBalance', $usersBalance);
-
     }
 
-    public function addExpenses()
+/*//file handler
+    public function getData(Request $request)
     {
-    }
+        $startData = $request['startData'];
+        $endData = $request['endData'];
+        if ($startData and $endData) {
+            $filteredArray = [];
+            $file = File::get('storage/daily.txt');
+            $arrayDaily = json_decode($file);
 
-    public function getBalacePeriod()
-    {
-        return view('layouts.balancePeriod');
-    }
+            foreach ($arrayDaily as $key => $value) {
 
-    public function getBalanceByPeriod(Request $request)
-    {
-        $startData = $request->startData;
-        $endData = $request->endData;
-        $users = User::all();
-        $usersBalance = [];
-        foreach ($users as $user) {
-            $userTransactions = Transaction::where('user_id', $user->id)->where('date','>=', $startData)->where('date','<=', $endData)->get();
-            $sumD = 0;
-            $sumR = 0;
-            foreach ($userTransactions as $userTransaction) {
-                if ($userTransaction->type == 1) {
-                    $sumR = $sumR + $userTransaction->sum;
-                } elseif ($userTransaction->type == 2) {
-                    $sumD = $sumD + $userTransaction->sum;
+                if ((Carbon::createFromFormat('Y-m-d', $startData) <= Carbon::createFromFormat('Y-m-d', $key)) and (Carbon::createFromFormat('Y-m-d', $key) <= Carbon::createFromFormat('Y-m-d', $endData))) {
+
+                    $filteredArray[$key] = $value;
+                    //dd($key,$value,$filteredArray);
                 }
-
             }
-            $usersBalance[] = ['user_name' => $user->name, 'balanceR' => $sumR, 'balanceD' => $sumD];
+            //dd($filteredArray);
+
+            return view('layouts.getData')->withList($filteredArray);
+        } else {
+            return view('layouts.getData');
         }
-        return json_encode($usersBalance);
-    }
+    } */
 
-    public function settings()
+//DB handler
+    public function getData(Request $request)
     {
-        return view('layouts.settings');
+        $startData = $request['startData'];
+        $endData = $request['endData'];
+        if ($startData and $endData) {
+            $filteredArray = [];
+          /*  $file = File::get('storage/daily.txt');
+            $arrayDaily = json_decode($file);*/
 
+            $filteredArray= UsdEur::where('Date','>=', $startData)->where('Date','<=', $endData)->get();
+
+
+            return view('layouts.getData')->withList($filteredArray)->withStart($startData)->withEnd($endData);
+        } else {$r = file_get_contents('https://www.ukr.net/');
+            return view('layouts.getData')->withR($r);
+        }
     }
 }

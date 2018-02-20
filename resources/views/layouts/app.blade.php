@@ -9,12 +9,19 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Финансовая система</title>
+    <title>Sagan</title>
     <script type="text/javascript" src="{{ URL::asset('bower/jquery/dist/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('bower/moment/moment.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('bower/moment/locale/ru.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('bower/dataTable/datatables.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('bower/dataTable/datetime-moment.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('bower/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('bower/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('bower/jquery-form-validator/form-validator/jquery.form-validator.js') }}"></script>
+
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+{{--    <script type="text/javascript" src="{{ URL::asset('js/jquery.maskedinput.js') }}"></script>--}}
+
     <link rel="stylesheet" href="{{ URL::asset('bower/bootstrap/dist/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ URL::asset('bower/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css') }}" />
  {{--   <script
@@ -31,6 +38,7 @@
     <!-- Custom CSS -->
     <link href="{{ URL::asset('css/sb-admin-2.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('css/common.css') }}" rel="stylesheet">
+    <link href="{{ URL::asset('bower/dataTable/datatables.css') }}" rel="stylesheet">
 
     <!-- Morris Charts CSS -->
  {{--   <link href="{{ URL::asset('vendor/morrisjs/morris.css') }}" rel="stylesheet">--}}

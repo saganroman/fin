@@ -2,44 +2,96 @@
 @section('content')
     <div id="page-wrapper">
         <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">Cтраница добавления транзакций (2 вариант) </h1>
+            <div class="col-md-12">
+                <h1 class="page-header">Для одного партнерa и нескольких  пользователей  </h1>
             </div>
-            <!-- /.col-lg-12 -->
+            <!-- /.col-md-12 -->
         </div>
-        <form action="/addFew" method="get">
+        <form action="{{url('addFewDetail/')}}" method="get">
             <div class="row">
                 <div class="col-md-12 ">
-                    <table class="table table-striped ">
-                        <tr>
-                            <th class="col-md-3 ">Партнерка</th>
-                            <th class="col-md-3 ">Дата</th>
-                            <th class="col-md-3 ">Сумма</th>
-                            <th class="col-md-3 ">#</th>
-                        </tr>
-                        <tr>
-                            <td>ParthnetName</td>
-                            <td> <input type='text' class="form-control" id='datetimepicker' name="date" /></td>
-                            <td> <input type='text' class="form-control" name="amount" pattern="[0-9]{3}"  id="amount"/></td>
-                            <td>   <select class="form-control"  name="currency">
-                                    <option value="1">pуб</option>
-                                    <option value="2">$</option>
-
-                                </select> </td>
-                        </tr>
-
-                    </table>
+                    <div class="form-group">
+                        <label for="users">Выберите пользователя:</label>
+                        <select class="form-control" id="users" name="user">
+                            <option value="0">===All===</option>
+                            @foreach($users as $user)
+                                <option value="{{$user->id}}">{{$user->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
-
             <div class="row">
-                <div class='col-md-4 pull-right'>
-                    <button class=" btn btn-primary" type="submit">Добавить бонус</button>
-                    <button class="btn btn-primary  pull-right" type="button">Смотреть статистику</button>
+                <div class="col-md-12 ">
+                    <div class="form-group">
+                        <label for="parthners">Выберите партнера:</label>
+                        <select class="form-control" id="partners" name="partner">
+                            @foreach($partners as $partner)
+                                <option value="{{$partner->id}}">{{$partner->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                {{--<div class="col-md-2  balance"> Текущий баланс:</div>
+                <div class="col-md-4 ">
+                    <button class=" btn btn-success pay" type="button">Выплатить</button>
+                </div>--}}
+            </div>
+            {{--<div class="row">--}}
+            {{--<div class='col-md-4'>--}}
+            {{--<div class="form-group">--}}
+            {{--<label for="amount">Сумма:</label>--}}
+            {{--<input type='text' class="form-control" name="amount" id="amount" required/>--}}
+            {{--</div>--}}
+            {{--</div>--}}
+            {{--</div>--}}
+            {{--<div class="row">--}}
+            {{--<div class='col-md-4'>--}}
+            {{--<div class="form-group">--}}
+            {{--<label for="currency">Валюта:</label>--}}
+            {{--<select class="form-control"  name="currency">--}}
+            {{--<option value="1">pуб</option>--}}
+            {{--<option value="2">$</option>--}}
+
+            {{--</select>--}}
+            {{--</div>--}}
+            {{--</div>--}}
+            {{--</div>--}}
+            <div class="row">
+                <div class='col-md-12'>
+                    <div class="form-group"><label for="date">Выберите дату:</label>
+                        <div class='input-group date' id='datetimepicker'>
+
+                            <input type='text' class="form-control" id="date" placeholder="Выберите дату" name="date"
+                                   readonly/>
+                            <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                        </div>
+                    </div>
+                </div>
+                {{-- <div class="col-md-4 col-md-offset-2 ">
+                     <button class=" btn btn-primary " type="button">Выплатить</button>
+                 </div>--}}
+
+            </div>
+            <div class="row">
+                <div class='col-md-12'>
+                    {{--<button class="btn btn-primary  " type="button">Смотреть статистику</button>--}}
+                    <button class=" btn btn-primary pull-right" type="submit">Добавить бонус</button>
                 </div>
             </div>
         </form>
-
+        <br><br>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </div>
     <!-- /#page-wrapper -->
 

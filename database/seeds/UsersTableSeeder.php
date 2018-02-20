@@ -63,7 +63,7 @@ class UsersTableSeeder extends Seeder
                     'password' => bcrypt('secret'),
                 ], [
                     'name' => "Пользователь4",
-                    'ref' => 4,
+                    'ref' => 2,
                     'type' => 3,
                     'karma' => 1,
                     'account' => 7,

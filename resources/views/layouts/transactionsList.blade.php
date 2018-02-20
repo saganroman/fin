@@ -10,7 +10,8 @@
 
         <div class="row">
             <div class="col-md-12 ">
-                <table class="table table-striped ">
+                <table class="table table-striped " id="dataTableLong">
+                    <thead>
                     <tr>
                         <th class="col-md-1 ">#</th>
                         <th class="col-md-2 ">Пользователь</th>
@@ -21,10 +22,11 @@
                         <th class="col-md-2 ">Дата</th>
 
                     </tr>
-
+                    </thead>
+                    <tbody>
                     @foreach($transactions as $transaction)
                         <tr>
-                            <td>{{$loop->iteration + $start }}</td>
+                            <td>{{$loop->iteration}}</td>
                             <td>{{$transaction->user->name}}</td>
                             <td>{{$transaction->sum}}</td>
                             <td>{{$transaction->type ==1?"Руб":"$"}}</td>
@@ -34,8 +36,9 @@
 
                         </tr>
                     @endforeach
+                    </tbody>
                 </table>
-                {{ $transactions->links() }}
+
             </div>
         </div>
 

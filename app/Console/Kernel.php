@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\SetPercent::class,
+        Commands\SetReferalPercent::class,
     ];
 
     /**
@@ -24,6 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+       // $schedule->command('percents:set')->everyMinute()->evenInMaintenanceMode();
+        $schedule->command('percents:set');
+        $schedule->command('referals:set');
         // $schedule->command('inspire')
         //          ->hourly();
     }
